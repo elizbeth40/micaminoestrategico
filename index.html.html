@@ -132,8 +132,6 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 @keyframes caer{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
 .locked-msg{text-align:center;padding:.75rem;font-size:.73rem;color:#B0A0A8;font-style:italic;line-height:1.5}
-.est-check-link{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--muted);text-decoration:none;background:var(--white);transition:all .25s;cursor:pointer}
-.est-check-link:hover{border-color:var(--rose);background:rgba(196,115,138,.06);transform:scale(1.1);color:var(--rose)}
 .estacion.especial{background:rgba(74,124,126,.04);border:1px solid rgba(74,124,126,.2)}
 .estacion.especial.completada{background:rgba(74,124,126,.1);border-color:rgba(74,124,126,.35)}
 .est-icono.evento{background:rgba(74,124,126,.12)}
@@ -210,9 +208,9 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 // CONFIGURACIÓN DE LÍDERES — EDITA SOLO AQUÍ cuando cambien
 // Formato Colombia: 57 + número sin espacios. Ej: 573001234567
 const LIDERES = {
-  1: "573147055336",  // Líder 1 — Cohorte Marzo    (LINDA-01 a LINDA-20)
-  2: "573147055336",  // Líder 2 — Cohorte Julio     (LINDA-21 a LINDA-40)
-  3: "573147055336",  // Líder 3 — Cohorte Octubre   (LINDA-41 a LINDA-60)
+  1: "57XXXXXXXXXX",  // Líder 1 — Cohorte Marzo    (LINDA-01 a LINDA-20)
+  2: "57XXXXXXXXXX",  // Líder 2 — Cohorte Julio     (LINDA-21 a LINDA-40)
+  3: "57XXXXXXXXXX",  // Líder 3 — Cohorte Octubre   (LINDA-41 a LINDA-60)
 };
 const RANGO_LIDERES = [
   { lider:1, desde:1,  hasta:20 },   // Cohorte Marzo    (LINDA-01 a LINDA-20)
@@ -403,38 +401,17 @@ function marcarEstacion(estId, faseId, btn) {
   const frase = FRASES[estId];
   const fase2 = FASES_DATA.find(f => f.id === faseId);
   const esFinal = fase2 && fase2.estaciones.every(e => estadoUsuario.estaciones[e.id]);
-  if (frase) {
-    setTimeout(() => mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
-      if (esFinal) setTimeout(() => mostrarCelebracion(), 400);
-    }), 300);
-  } else if (esFinal) {
-    setTimeout(() => mostrarCelebracion(), 400);
-  }
-  setTimeout(() => renderCamino(), 1500);
-}
-
-function marcarVisual(estId, faseId, linkEl) {
-  if (estadoUsuario.estaciones[estId]) return;
-  estadoUsuario.estaciones[estId] = true;
-  guardarEstado();
-  // Update visual of the link
-  const wrap = linkEl.closest('.est-check-wrap');
-  if (wrap) {
-    wrap.innerHTML = '<div class="est-check hecho">✓</div><div class="est-check-label">Listo</div>';
-  }
-  const estCard = linkEl.closest('.estacion');
-  if (estCard) { estCard.classList.remove('activa'); estCard.classList.add('completada'); }
-  actualizarStats();
-  actualizarProgress();
-  const frase = FRASES[estId];
-  const fase2 = FASES_DATA.find(f => f.id === faseId);
-  const esFinal = fase2 && fase2.estaciones.every(e => estadoUsuario.estaciones[e.id]);
-  if (frase) {
-    setTimeout(() => mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
-      if (esFinal) setTimeout(() => mostrarCelebracion(), 400);
-    }), 400);
-  } else if (esFinal) {
-    setTimeout(() => mostrarCelebracion(), 400);
+  if (esFinal) {
+    // Última estación de la fase — celebración con confeti
+    if (frase) {
+      setTimeout(() => mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
+        mostrarCelebracion();
+      }), 300);
+    } else {
+      setTimeout(() => mostrarCelebracion(), 400);
+    }
+  } else if (frase) {
+    setTimeout(() => mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, null), 300);
   }
   setTimeout(() => renderCamino(), 1500);
 }
@@ -550,17 +527,9 @@ function renderCamino() {
             ${est.tipo === 'video' ? '<div class="est-tarea">📺 Después de ver el video, deja tu comentario en YouTube. ¡El equipo lo está esperando!</div>' : ''}`;
         }
 
-        // Build WA URL
-        const etq = ETIQUETAS[est.id] || est.id;
-        const waMsg = encodeURIComponent('Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etq + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38');
-        const waNum = obtenerWA(estadoUsuario.codigo);
-        const waHref = (waNum && !waNum.includes('XXXXXXXXXX')) ? 'https://wa.me/' + waNum + '?text=' + waMsg : null;
-
         const checkHTML = hecho
           ? `<div class="est-check-wrap"><div class="est-check hecho">✓</div><div class="est-check-label">Listo</div></div>`
-          : waHref
-            ? `<div class="est-check-wrap"><a href="${waHref}" target="_blank" class="est-check-link" onclick="marcarVisual('${est.id}',${fase.id},this)">○</a><div class="est-check-label" style="font-size:.5rem;color:var(--teal);line-height:1.3;max-width:36px;text-align:center;">Marcar y avisar</div></div>`
-            : `<div class="est-check-wrap"><div class="est-check" onclick="marcarEstacion('${est.id}',${fase.id},this)">○</div><div class="est-check-label">Marcar</div></div>`;
+          : `<div class="est-check-wrap"><div class="est-check" onclick="marcarEstacion('${est.id}',${fase.id},this)">○</div><div class="est-check-label">Marcar</div></div>`;
 
         estacionesHTML += `
           <div class="estacion ${claseEst}">
@@ -617,4 +586,39 @@ function crearHito(hito, desbloqueado, fi) {
     <div class="hito-titulo">${hito.titulo}</div>
     <div class="hito-desc">${desbloqueado ? hito.desc : 'Este hito se desbloqueará cuando llegue el momento. ¡Sigue avanzando!'}</div>
     <span class="hito-badge ${desbloqueado ? 'activo' : 'bloq'}">${desbloqueado ? hito.momento : 'Bloqueado'}</span>`;
-  return
+  return div;
+}
+
+function crearConector() {
+  const div = document.createElement('div');
+  div.className = 'fase-conector';
+  div.innerHTML = '<div class="conector-linea"></div>';
+  return div;
+}
+
+function actualizarProgress() {
+  const totalVideos = 8; // 7 fases + F4 tiene 2 videos
+  const videosIds = ['f1_video','f2_video','f3_video','f4_vid1','f4_vid2','f5_video','f6_video','f7_video'];
+  const completados = videosIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const pct = Math.round((completados / totalVideos) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${completados} de ${totalVideos} videos`;
+}
+
+function actualizarStats() {
+  const videosIds = ['f1_video','f2_video','f3_video','f4_vid1','f4_vid2','f5_video','f6_video','f7_video'];
+  const profsIds  = ['f1_prof','f2_prof','f3_prof','f4_prof','f5_prof','f6_prof','f7_prof'];
+  const videos = videosIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const profs  = profsIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const fases  = FASES_DATA.filter(f => f.estaciones.every(e => estadoUsuario.estaciones[e.id])).length;
+  document.getElementById('stat-videos').textContent = videos;
+  document.getElementById('stat-profs').textContent  = profs;
+  document.getElementById('stat-fases').textContent  = fases;
+}
+
+document.getElementById('input-apodo').addEventListener('keydown', e => { if(e.key==='Enter') entrar(); });
+document.getElementById('input-codigo').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('input-apodo').focus(); });
+document.getElementById('input-codigo').addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+</script>
+</body>
+</html>
