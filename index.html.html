@@ -346,14 +346,14 @@ function generarCodigo(codigo) {
 
 async function cargarEstado(codigo) {
   try {
-    const result = await window.storage.get(`camino:${codigo}`);
-    if (result) return JSON.parse(result.value);
+    const data = localStorage.getItem('camino:' + codigo);
+    if (data) return JSON.parse(data);
   } catch(e) {}
   return { faseDesbloqueada:1, coramDesbloqueado:false, retiroDesbloqueado:false, estaciones:{} };
 }
 
 async function guardarEstado() {
-  try { await window.storage.set(`camino:${estadoUsuario.codigo}`, JSON.stringify(estadoUsuario)); } catch(e) {}
+  try { localStorage.setItem('camino:' + estadoUsuario.codigo, JSON.stringify(estadoUsuario)); } catch(e) {}
 }
 
 async function entrar() {
@@ -623,4 +623,4 @@ function crearConector() {
   return div;
 }
 
-fu
+function actualizarPro
