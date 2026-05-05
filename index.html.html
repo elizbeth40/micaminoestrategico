@@ -210,8 +210,8 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 // CONFIGURACIÓN DE LÍDERES — EDITA SOLO AQUÍ cuando cambien
 // Formato Colombia: 57 + número sin espacios. Ej: 573001234567
 const LIDERES = {
-  1: "57XXXXXXXXXX",  // Líder 1 — Cohorte Marzo    (LINDA-01 a LINDA-20)
-  2: "57XXXXXXXXXX",  // Líder 2 — Cohorte Julio     (LINDA-21 a LINDA-40)
+  1: "573147055336",  // Líder 1 — Cohorte Marzo    (LINDA-01 a LINDA-20)
+  2: "573147055336",  // Líder 2 — Cohorte Julio     (LINDA-21 a LINDA-40)
   3: "573147055336",  // Líder 3 — Cohorte Octubre   (LINDA-41 a LINDA-60)
 };
 const RANGO_LIDERES = [
@@ -344,7 +344,7 @@ function generarCodigo(codigo) {
   return null;
 }
 
-async function cargarEstado(codigo) {
+function cargarEstado(codigo) {
   try {
     const data = localStorage.getItem('camino:' + codigo);
     if (data) return JSON.parse(data);
@@ -352,17 +352,23 @@ async function cargarEstado(codigo) {
   return { faseDesbloqueada:1, coramDesbloqueado:false, retiroDesbloqueado:false, estaciones:{} };
 }
 
-async function guardarEstado() {
+function guardarEstado() {
   try { localStorage.setItem('camino:' + estadoUsuario.codigo, JSON.stringify(estadoUsuario)); } catch(e) {}
 }
 
-async function entrar() {
+function entrar() {
   const inputCodigo = document.getElementById('input-codigo').value.trim();
   const apodo = document.getElementById('input-apodo').value.trim() || "Linda";
   const codigo = generarCodigo(inputCodigo);
   if (!codigo) { document.getElementById('login-error').style.display='block'; return; }
   document.getElementById('login-error').style.display='none';
-  estadoUsuario = await cargarEstado(codigo);
+  // Load from localStorage synchronously
+  try {
+    const data = localStorage.getItem('camino:' + codigo);
+    estadoUsuario = data ? JSON.parse(data) : { faseDesbloqueada:1, coramDesbloqueado:false, retiroDesbloqueado:false, estaciones:{} };
+  } catch(e) {
+    estadoUsuario = { faseDesbloqueada:1, coramDesbloqueado:false, retiroDesbloqueado:false, estaciones:{} };
+  }
   estadoUsuario.codigo = codigo;
   estadoUsuario.apodo = apodo;
   mostrarApp();
@@ -408,8 +414,6 @@ function marcarEstacion(estId, faseId, btn) {
 }
 
 function marcarVisual(estId, faseId, linkEl) {
-  // Called from <a> onclick — WA already opens via href
-  // Just mark and show frase/celebration
   if (estadoUsuario.estaciones[estId]) return;
   estadoUsuario.estaciones[estId] = true;
   guardarEstado();
@@ -613,14 +617,4 @@ function crearHito(hito, desbloqueado, fi) {
     <div class="hito-titulo">${hito.titulo}</div>
     <div class="hito-desc">${desbloqueado ? hito.desc : 'Este hito se desbloqueará cuando llegue el momento. ¡Sigue avanzando!'}</div>
     <span class="hito-badge ${desbloqueado ? 'activo' : 'bloq'}">${desbloqueado ? hito.momento : 'Bloqueado'}</span>`;
-  return div;
-}
-
-function crearConector() {
-  const div = document.createElement('div');
-  div.className = 'fase-conector';
-  div.innerHTML = '<div class="conector-linea"></div>';
-  return div;
-}
-
-function actualizarPro
+  return
