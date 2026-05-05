@@ -382,11 +382,20 @@ function mostrarApp() {
   actualizarStats();
 }
 
-async function marcarEstacion(estId, faseId, btn) {
+function marcarEstacion(estId, faseId, btn) {
   if (estadoUsuario.estaciones[estId]) return;
-  estadoUsuario.estaciones[estId] = true;
-  await guardarEstado();
 
+  // PASO 1: Abrir WhatsApp SINCRÓNICAMENTE — mismo gesto del usuario
+  const etiqueta = ETIQUETAS[estId] || estId;
+  const msg = 'Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etiqueta + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38';
+  const wa = obtenerWA(estadoUsuario.codigo);
+  if (wa && !wa.includes('XXXXXXXXXX')) {
+    window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // PASO 2: Guardar y actualizar visual
+  estadoUsuario.estaciones[estId] = true;
+  guardarEstado();
   btn.classList.add('hecho');
   btn.textContent = '✓';
   const estCard = btn.closest('.estacion');
@@ -394,26 +403,19 @@ async function marcarEstacion(estId, faseId, btn) {
   actualizarStats();
   actualizarProgress();
 
+  // PASO 3: Mostrar frase o celebración
   const frase = FRASES[estId];
   const fase2 = FASES_DATA.find(f => f.id === faseId);
   const esFinal = fase2 && fase2.estaciones.every(e => estadoUsuario.estaciones[e.id]);
 
-  // Construir URL de WhatsApp
-  const etiqueta = ETIQUETAS[estId] || estId;
-  const msg = 'Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etiqueta + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38';
-  const wa = obtenerWA(estadoUsuario.codigo);
-  const waUrl = (wa && !wa.includes('XXXXXXXXXX')) ? 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg) : null;
-
   if (frase) {
-    // Mostrar frase 7 segundos, luego abrir WA y celebrar si es final
-    mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
-      if (waUrl) window.open(waUrl, '_blank');
-      if (esFinal) setTimeout(() => mostrarCelebracion(), 500);
-    });
-  } else {
-    // Sin frase: abrir WA directo
-    if (waUrl) window.open(waUrl, '_blank');
-    if (esFinal) setTimeout(() => mostrarCelebracion(), 400);
+    setTimeout(() => {
+      mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
+        if (esFinal) setTimeout(() => mostrarCelebracion(), 400);
+      });
+    }, 300);
+  } else if (esFinal) {
+    setTimeout(() => mostrarCelebracion(), 400);
   }
 
   setTimeout(() => renderCamino(), 1500);
