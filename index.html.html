@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0063)file:///C:/Users/User/Downloads/mi_camino_estrategico_v3_1.html -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="es">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Mi Camino Estratégico</title>
-<link href="./Mi Camino Estratégico_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --dark:#2A1520;--rose:#C4738A;--rose-soft:#E8A0B0;--rose-pale:#FBF0F3;
+  --dark:#2A1520;--rose:#C4738A;--rose-soft:#E8A0B0;
   --terra:#C8836C;--cream:#FBF4F0;--cream2:#F5EDE8;
   --olive:#7A8C5A;--gold:#C8956C;--gold-lt:#F0D5B0;
   --white:#FFFFFF;--text:#2A1520;--muted:#9A7A80;--border:#EAD5D8;
@@ -43,19 +43,34 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 .header-title em{font-style:italic;color:var(--rose-soft)}
 .header-code{font-size:.65rem;letter-spacing:.2em;color:var(--rose);text-transform:uppercase;margin-top:.15rem}
 .btn-salir{font-size:.7rem;color:rgba(232,160,176,.4);background:transparent;border:none;cursor:pointer;padding:.25rem;font-family:'Jost',sans-serif}
-.progress-bar-wrap{width:100%;height:3px;background:rgba(196,115,138,.15);border-radius:2px}
+.progress-bar-wrap{width:100%;height:4px;background:rgba(196,115,138,.15);border-radius:2px}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--terra));border-radius:2px;transition:width .6s ease}
 .progress-label{font-size:.65rem;color:rgba(232,160,176,.5);text-align:right;margin-top:.3rem;letter-spacing:.1em}
 
 /* CAMINO */
 .camino-wrap{padding:1.5rem 1.25rem 4rem;max-width:480px;margin:0 auto}
+
+/* BIENVENIDA */
+.bienvenida-card{background:var(--dark);border-radius:16px;padding:1.5rem;margin-bottom:1.75rem;text-align:center}
+.bienvenida-card .saludo{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);margin-bottom:.4rem}
+.bienvenida-card .nombre-app{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold-lt);line-height:1.1;margin-bottom:.4rem}
+.bienvenida-card .nombre-app em{font-style:italic;color:var(--rose-soft)}
+.bienvenida-card .frase{font-size:.78rem;color:rgba(232,160,176,.6);font-style:italic;line-height:1.5}
+
+/* STATS */
+.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1.5rem}
+.stat-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:.75rem .5rem;text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--rose);display:block;line-height:1}
+.stat-lbl{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+
+/* FASE */
 .fase-bloque{margin-bottom:2rem;animation:fadeUp .4s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fase-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
-.fase-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:600;flex-shrink:0}
-.fase-dot.desbloqueada{background:var(--rose);color:white;box-shadow:0 0 0 3px rgba(196,115,138,.2)}
+.fase-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:600;flex-shrink:0;transition:all .3s}
+.fase-dot.activa{background:var(--rose);color:white;box-shadow:0 0 0 4px rgba(196,115,138,.2)}
+.fase-dot.completada{background:var(--olive);color:white;box-shadow:0 0 0 4px rgba(122,140,90,.2)}
 .fase-dot.bloqueada{background:var(--locked);color:#B0A0A8}
-.fase-dot.completada{background:var(--olive);color:white;box-shadow:0 0 0 3px rgba(122,140,90,.2)}
 .fase-info{flex:1}
 .fase-nombre{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;line-height:1.1;color:var(--text)}
 .fase-nombre.bloqueada{color:var(--locked)}
@@ -65,36 +80,32 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 .badge-activa{background:rgba(196,115,138,.12);color:var(--rose)}
 .badge-bloqueada{background:rgba(216,206,208,.3);color:#B0A0A8}
 
-/* Estaciones */
+/* ESTACIONES */
 .estaciones{margin-left:18px;padding-left:18px;border-left:2px dashed rgba(196,115,138,.2)}
-.estacion{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem;border-radius:10px;margin-bottom:.5rem;transition:all .2s;position:relative}
-.estacion:last-child{margin-bottom:0}
-.estacion.desbloqueada{background:var(--white);border:1px solid var(--border)}
+.estacion{display:flex;align-items:flex-start;gap:.75rem;padding:.85rem;border-radius:10px;margin-bottom:.5rem;transition:all .25s;position:relative}
+.estacion.activa{background:var(--white);border:1px solid var(--border)}
 .estacion.completada{background:rgba(122,140,90,.06);border:1px solid rgba(122,140,90,.2)}
-.estacion.bloqueada{opacity:.45}
+.estacion.bloqueada{opacity:.4}
 .est-icono{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
 .est-icono.video{background:rgba(196,115,138,.12)}
 .est-icono.prof{background:rgba(122,92,138,.1)}
 .est-icono.regalo{background:rgba(200,149,108,.12)}
+.est-icono.ayuno{background:rgba(74,124,126,.1)}
 .est-info{flex:1}
 .est-tipo{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.15rem}
 .est-nombre{font-size:.88rem;font-weight:400;line-height:1.3;color:var(--text)}
-.est-nombre.bloqueado{color:var(--locked)}
-.est-desc{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-style:italic;line-height:1.4}
+.est-frase{font-size:.78rem;color:var(--rose);font-style:italic;margin-top:.3rem;line-height:1.5;border-left:2px solid rgba(196,115,138,.3);padding-left:.6rem}
+.est-tarea{font-size:.72rem;color:var(--teal);margin-top:.3rem;font-style:italic;line-height:1.4;background:rgba(74,124,126,.06);padding:.35rem .6rem;border-radius:6px}
 .est-prof-legend{font-size:.78rem;color:var(--purple);margin-top:.2rem;font-style:italic}
 
-/* Checkbox interactivo */
-.est-check-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;flex-shrink:0}
-.est-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:transparent;transition:all .25s;cursor:pointer;background:var(--white)}
-.est-check:hover{border-color:var(--rose);background:rgba(196,115,138,.06)}
+/* CHECK */
+.est-check-wrap{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex-shrink:0}
+.est-check{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:transparent;transition:all .25s;cursor:pointer;background:var(--white)}
+.est-check:hover:not(.hecho){border-color:var(--rose);background:rgba(196,115,138,.06);transform:scale(1.1)}
 .est-check.hecho{background:var(--olive);border-color:var(--olive);color:white;cursor:default}
-.est-check-label{font-size:.55rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center;line-height:1.2}
+.est-check-label{font-size:.55rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;text-align:center}
 
-/* Toast de confirmación */
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:var(--gold-lt);font-family:'Jost',sans-serif;font-size:.8rem;padding:.75rem 1.5rem;border-radius:20px;border:1px solid rgba(196,115,138,.3);transition:transform .3s ease;z-index:100;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* Hito */
+/* HITO */
 .hito-card{background:var(--dark);border-radius:12px;padding:1.25rem;margin-bottom:2rem;text-align:center;animation:fadeUp .4s ease both}
 .hito-card.bloqueado{opacity:.5;filter:grayscale(.4)}
 .hito-icon{font-size:1.6rem;margin-bottom:.5rem}
@@ -104,31 +115,34 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 .hito-badge.activo{background:rgba(122,92,138,.2);color:var(--purple)}
 .hito-badge.bloq{background:rgba(216,206,208,.2);color:#B0A0A8}
 
-/* Conector */
+/* CONECTOR */
 .fase-conector{display:flex;justify-content:center;margin:.25rem 0 .5rem}
 .conector-linea{width:2px;height:24px;background:linear-gradient(to bottom,rgba(196,115,138,.3),rgba(196,115,138,.05));border-radius:1px}
 
-/* Bienvenida */
-.bienvenida-card{background:var(--dark);border-radius:16px;padding:1.5rem;margin-bottom:1.75rem;text-align:center}
-.bienvenida-card .saludo{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);margin-bottom:.4rem}
-.bienvenida-card .nombre-app{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold-lt);line-height:1.1;margin-bottom:.4rem}
-.bienvenida-card .nombre-app em{font-style:italic;color:var(--rose-soft)}
-.bienvenida-card .frase{font-size:.78rem;color:rgba(232,160,176,.6);font-style:italic;line-height:1.5}
+/* CELEBRACIÓN */
+.celebracion-overlay{position:fixed;inset:0;z-index:100;pointer-events:none;overflow:hidden}
+.celebracion-card{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(300px);opacity:0;pointer-events:none;background:var(--dark);border:1px solid rgba(196,115,138,.3);border-radius:16px;padding:1.25rem 1.5rem;max-width:320px;width:90%;text-align:center;transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;z-index:101;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.celebracion-card.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+.celeb-icon{font-size:2rem;margin-bottom:.5rem}
+.celeb-titulo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold-lt);margin-bottom:.3rem}
+.celeb-frase{font-size:.8rem;color:var(--rose-soft);font-style:italic;line-height:1.5}
 
-/* Stats */
-.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1.5rem}
-.stat-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:.75rem .5rem;text-align:center}
-.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--rose);display:block;line-height:1}
-.stat-lbl{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
-.locked-msg{text-align:center;padding:.5rem;font-size:.72rem;color:#B0A0A8;font-style:italic}
+/* CONFETI */
+.confeti-piece{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;animation:caer 2.5s ease-in forwards}
+@keyframes caer{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+.locked-msg{text-align:center;padding:.75rem;font-size:.73rem;color:#B0A0A8;font-style:italic;line-height:1.5}
+.estacion.especial{background:rgba(74,124,126,.04);border:1px solid rgba(74,124,126,.2)}
+.estacion.especial.completada{background:rgba(74,124,126,.1);border-color:rgba(74,124,126,.35)}
+.est-icono.evento{background:rgba(74,124,126,.12)}
+.est-icono.mentoria{background:rgba(122,140,90,.12)}
+.est-icono.financiero{background:rgba(200,149,108,.15)}
+.header-lider{font-size:.6rem;color:rgba(232,160,176,.25);margin-top:.1rem}
 .app-footer{text-align:center;padding:1rem;font-size:.68rem;color:rgba(196,115,138,.3);letter-spacing:.1em}
-
-
 </style>
-<style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
+</head>
 <body>
 
-<!-- PANTALLA DE INGRESO -->
 <div id="screen-login">
   <div class="login-logo">
     <div class="eyebrow">Agenda Estratégica</div>
@@ -137,33 +151,38 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
   </div>
   <div class="login-card">
     <label for="input-codigo">Tu código de Linda</label>
-    <input type="text" id="input-codigo" placeholder="LINDA-01" maxlength="10" autocomplete="off" autocapitalize="characters" data-ddg-inputtype="identities.addressPostalCode" data-ddg-autofill="true">
+    <input type="text" id="input-codigo" placeholder="LINDA-01" maxlength="10" autocomplete="off" autocapitalize="characters">
     <div class="login-hint">Tu código te lo dio el equipo de la Agenda</div>
     <label for="input-apodo" style="margin-top:.25rem;">Tu nombre o apodo</label>
-    <input type="text" id="input-apodo" placeholder="Como quieres que te llamemos" maxlength="30" autocomplete="off" data-ddg-inputtype="credentials.username">
+    <input type="text" id="input-apodo" placeholder="Como quieres que te llamemos" maxlength="30" autocomplete="off">
     <div style="height:.75rem;"></div>
     <button class="btn-enter" onclick="entrar()">Ver mi camino</button>
     <div class="login-error" id="login-error">Código no válido. Escríbelo tal como te lo dieron.</div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">¡Avanzando! 🌸</div>
+<!-- Celebración -->
+<div class="celebracion-overlay" id="confeti-wrap"></div>
+<div class="celebracion-card" id="celebracion">
+  <div class="celeb-icon" id="celeb-icon">🌸</div>
+  <div class="celeb-titulo" id="celeb-titulo"></div>
+  <div class="celeb-frase" id="celeb-frase"></div>
+</div>
 
-<!-- APP PRINCIPAL -->
 <div id="screen-app">
   <div class="app-header">
     <div class="app-header-top">
       <div>
         <div class="header-title">Mi Camino <em>Estratégico</em></div>
         <div class="header-code" id="header-codigo"></div>
+        <div class="header-lider" id="header-lider" style="font-size:.6rem;color:rgba(232,160,176,.25);margin-top:.1rem;"></div>
       </div>
       <button class="btn-salir" onclick="salir()">Salir</button>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
     </div>
-    <div class="progress-label" id="progress-label">0 de 7 fases</div>
+    <div class="progress-label" id="progress-label">0 de 8 videos</div>
   </div>
 
   <div class="camino-wrap">
@@ -174,20 +193,10 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
     </div>
 
     <div class="stat-bar">
-      <div class="stat-item">
-        <span class="stat-num" id="stat-videos">0</span>
-        <div class="stat-lbl">Videos</div>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num" id="stat-profs">0</span>
-        <div class="stat-lbl">Profund.</div>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num" id="stat-fases">0</span>
-        <div class="stat-lbl">Fases</div>
-      </div>
+      <div class="stat-item"><span class="stat-num" id="stat-videos">0</span><div class="stat-lbl">Videos</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-profs">0</span><div class="stat-lbl">Profund.</div></div>
+      <div class="stat-item"><span class="stat-num" id="stat-fases">0</span><div class="stat-lbl">Fases</div></div>
     </div>
-
 
     <div id="camino-fases"></div>
     <div class="app-footer">Agenda Estratégica · Ministerio de Damas</div>
@@ -195,63 +204,131 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 </div>
 
 <script>
+// ══════════════════════════════════════════════════════════════
+// CONFIGURACIÓN DE LÍDERES — EDITA SOLO AQUÍ cuando cambien
+// Formato Colombia: 57 + número sin espacios. Ej: 573001234567
+const LIDERES = {
+  1: "573147055336",  // Líder 1 — Cohorte Marzo    (LINDA-01 a LINDA-20)
+  2: "573147055336",  // Líder 2 — Cohorte Julio     (LINDA-21 a LINDA-40)
+  3: "573147055336",  // Líder 3 — Cohorte Octubre   (LINDA-41 a LINDA-60)
+};
+const RANGO_LIDERES = [
+  { lider:1, desde:1,  hasta:20 },   // Cohorte Marzo    (LINDA-01 a LINDA-20)
+  { lider:2, desde:21, hasta:40 },   // Cohorte Julio    (LINDA-21 a LINDA-40)
+  { lider:3, desde:41, hasta:60 },   // Cohorte Octubre  (LINDA-41 a LINDA-60)
+  // Para agregar Líder 4: { lider:4, desde:61, hasta:80 }
+  // Avisa a tu equipo de tecnología y se añade en 2 minutos
+];
+// ══════════════════════════════════════════════════════════════
+
+function obtenerLider(codigo) {
+  const n = parseInt(codigo.replace('LINDA-',''));
+  const r = RANGO_LIDERES.find(r => n >= r.desde && n <= r.hasta);
+  return r ? r.lider : 1;
+}
+function obtenerWA(codigo) { return LIDERES[obtenerLider(codigo)]; }
+// ─── FRASES REALES DE ELIZABETH POR ESTACIÓN ──────────────────
+const FRASES = {
+  // F1
+  'f1_video':  "Linda, eres una mujer creada por Dios. No eres casualidad — Él te vio en el vientre de tu madre. Estás aquí porque Él te ama.",
+  'f1_prof':   "Linda, eres única. Otras podrán hacer lo mismo que tú, pero jamás como tú lo haces.",
+  // F2
+  'f2_video':  "Ser parte de algo más grande que tú da luz a tu existencia. Eres incluida en Su familia y en Sus propósitos porque Él te ama.",
+  'f2_prof':   "Tu historia de vida apunta a tu propósito. Todo lo que has vivido puedes usarlo para tu bien.",
+  // F3
+  'f3_video':  "Linda, como te ves ahora influye en tu destino. No te permitas mentiras — abraza Su Palabra.",
+  'f3_prof':   "Has aprendido que una vida organizada parte desde el corazón en orden.",
+  // F4
+  'f4_vid1':   "Cuando hay un porqué por el cual luchar, es más fácil hacerlo. Acabas de definir tus metas — esas serán tu razón para disciplinarte.",
+  'f4_vid2':   "Tener que rendirte cuentas a ti misma es la clave de la mayordomía cristiana.",
+  'f4_prof':   "Linda, no te dejaremos sola. ¿Qué tal si nos rendimos cuentas la una a la otra?",
+  // F5
+  'f5_video':  "Si quieres saber dónde está tu corazón, jala el hilo de tu tiempo y de tu manejo del dinero.",
+  'f5_prof':   "Tu confianza diaria en tu Padre que te sustenta hará la diferencia en el manejo del dinero.",
+  // F6
+  'f6_video':  "Cuánto dependes de Dios se evidencia en tu tiempo con Él.",
+  'f6_prof':   "Cuánto has crecido, Linda. Solo compárate con tus propios aprendizajes.",
+  // F7
+  'f7_video':  "Lo que construiste en este proceso no fue solo conocimiento — fue carácter. Ahora vívelo cada día.",
+  'f7_prof':   "Permanece. Lo que Dios comenzó en ti, Él lo completará. Eres una mujer Coram Deo.",
+};
+
+// Celebraciones por fase completada
+const CELEBRACIONES = {
+  1: { icon:"🌸", titulo:"¡F1 completada!", frase:"Eres una mujer creada y amada. ¡Ese es tu fundamento!" },
+  2: { icon:"✨", titulo:"¡F2 completada!", frase:"Tu historia apunta a tu propósito. ¡Sigue adelante!" },
+  3: { icon:"🎯", titulo:"¡F3 completada!", frase:"Tu visión está tomando forma. ¡La vida organizada empieza en el corazón!" },
+  4: { icon:"⚡", titulo:"¡F4 completada!", frase:"¡Tus metas y hábitos ya tienen forma! No estarás sola en esto." },
+  5: { icon:"💰", titulo:"¡F5 completada!", frase:"¡Evaluaste tu corazón con valentía! Eso es crecimiento real." },
+  6: { icon:"🕊", titulo:"¡F6 completada!", frase:"Tu dependencia de Dios es tu mayor fortaleza. ¡Sigue cultivándola!" },
+  7: { icon:"👑", titulo:"¡F7 completada!", frase:"¡Completaste las 7 fases! Eres una mujer Coram Deo. 🌿" },
+};
+
+// ─── DATOS DE FASES ───────────────────────────────────────────
 const FASES_DATA = [
   {
     id:1, codigo:"F1", nombre:"Cimentación", subtitulo:"Identidad en Cristo",
     estaciones:[
-      {tipo:"video", nombre:"Video — Identidad en Cristo", desc:"El fundamento de todo. Descubre quién eres antes de intentar hacer."},
-      {tipo:"prof",  nombre:"Profundización", desc:null},
+      {id:'f1_video', tipo:"video", nombre:"Video — Identidad en Cristo"},
+      {id:'f1_prof',  tipo:"prof",  nombre:"Profundización"},
+      {id:'f1_ayuno', tipo:"evento", nombre:"Ayuno", especial:true},
     ]
   },
   {
-    id:2, codigo:"F2", nombre:"Direccional", subtitulo:"Misión personal",
+    id:2, codigo:"F2", nombre:"Direccional", subtitulo:"Misión personal", regalo:1,
     estaciones:[
-      {tipo:"video", nombre:"Video — Tu misión personal", desc:"¿Para qué te creó Dios específicamente a ti?"},
-      {tipo:"prof",  nombre:"Profundización", desc:null},
+      {id:'f2_video', tipo:"video",  nombre:"Video — Tu misión personal"},
+      {id:'f2_prof',  tipo:"prof",   nombre:"Profundización"},
+      {id:'f2_regalo',tipo:"regalo", nombre:"🎁 Regalo — Libro Creada", desc:"Un regalo especial preparado con amor para ti en esta fase."},
     ]
   },
   {
-    id:3, codigo:"F3", nombre:"Proyección", subtitulo:"Visión + Tu discípula", regalo:1,
+    id:3, codigo:"F3", nombre:"Proyección", subtitulo:"Construye tu visión",
     estaciones:[
-      {tipo:"video",  nombre:"Video — Construye tu visión", desc:"¿A dónde te lleva Dios? La visión da dirección a la misión."},
-      {tipo:"prof",   nombre:"Profundización", desc:null},
-      {tipo:"regalo", nombre:"Regalo — Material especial", desc:"Un descargable especial preparado con amor para esta fase."},
+      {id:'f3_video',  tipo:"video", nombre:"Video — Construye tu visión"},
+      {id:'f3_prof',   tipo:"prof",  nombre:"Profundización"},
+      {id:'f3_envivo', tipo:"evento", nombre:"Envivo de F3", especial:true,
+       desc:"Espacio en vivo con Elizabeth sobre tu visión. Si no puedes en vivo, ve la grabación."},
     ]
   },
   {
-    id:4, codigo:"F4", nombre:"Proyección & Despliegue", subtitulo:"Plan 2026",
+    id:4, codigo:"F4", nombre:"Operativa", subtitulo:"Visión, metas y hábitos",
     estaciones:[
-      {tipo:"video", nombre:"Video — Del sueño al plan", desc:"Cómo convertir tu visión en un plan concreto."},
-      {tipo:"prof",  nombre:"Profundización", desc:null},
+      {id:'f4_vid1', tipo:"video", nombre:"Video 1 — Visión & Prioridades"},
+      {id:'f4_vid2', tipo:"video", nombre:"Video 2 — Metas & Hábitos"},
+      {id:'f4_prof', tipo:"prof",  nombre:"Profundización"},
     ]
   },
   {
-    id:5, codigo:"F5", nombre:"Operativa", subtitulo:"Plan de acción",
+    id:5, codigo:"F5", nombre:"Evaluación", subtitulo:"Evalúa tu corazón", regalo:2,
     estaciones:[
-      {tipo:"video", nombre:"Video — Plan de acción", desc:"Del plan a la acción. Hábitos, agenda y límites de tiempo."},
-      {tipo:"prof",  nombre:"Profundización", desc:null},
+      {id:'f5_video',      tipo:"video",      nombre:"Video — Evalúa tu corazón"},
+      {id:'f5_prof',       tipo:"prof",       nombre:"Profundización"},
+      {id:'f5_regalo',     tipo:"regalo",     nombre:"🎁 Regalo especial", desc:"Material especial preparado para esta etapa."},
+      {id:'f5_financiero', tipo:"financiero", nombre:"Encuentro Financiero", especial:true,
+       desc:"Encuentro presencial sobre mayordomía cristiana. El equipo te confirma la fecha y el lugar."},
+      {id:'f5_mentoria',   tipo:"mentoria",   nombre:"Mentoría personalizada", especial:true,
+       desc:"Tu espacio personal con Elizabeth. Comunícate con tu líder para agendarla."},
     ]
   },
   {
-    id:6, codigo:"F6", nombre:"Evaluación", subtitulo:"Revisión y crecimiento", regalo:2,
+    id:6, codigo:"F6", nombre:"Cultura & Sostenibilidad", subtitulo:"Dependencia de Dios",
     estaciones:[
-      {tipo:"video",  nombre:"Video — Evalúa y ajusta", desc:"Aprender a revisar, corregir y crecer sin condenarte."},
-      {tipo:"prof",   nombre:"Profundización", desc:null},
-      {tipo:"regalo", nombre:"Regalo — Material especial", desc:"Un descargable especial para esta fase."},
+      {id:'f6_video', tipo:"video", nombre:"Video — Cultura & Sostenibilidad"},
+      {id:'f6_prof',  tipo:"prof",  nombre:"Profundización"},
     ]
   },
   {
-    id:7, codigo:"F7", nombre:"Cultura & Permanencia", subtitulo:"Caminar Coram Deo", regalo:3,
+    id:7, codigo:"F7", nombre:"Permanencia", subtitulo:"Caminar Coram Deo",
     estaciones:[
-      {tipo:"video",  nombre:"Video — Sostener lo conquistado", desc:"La última fase no es el fin — es el inicio."},
-      {tipo:"prof",   nombre:"Profundización", desc:null},
-      {tipo:"regalo", nombre:"Regalo de cierre", desc:"Un regalo especial para celebrar todo lo que Dios hizo en ti."},
+      {id:'f7_video', tipo:"video", nombre:"Video — Permanencia"},
+      {id:'f7_prof',  tipo:"prof",  nombre:"Profundización"},
     ]
   },
 ];
 
-const HITO_CORAM  = {id:"coram",  icon:"🕊", titulo:"Evento Coram Deo",  desc:"Un encuentro íntimo. Trae a tu discípula y celebren juntas lo que Dios ha hecho.", momento:"A mediados del entrenamiento"};
-const HITO_RETIRO = {id:"retiro", icon:"🌿", titulo:"Retiro Final",       desc:"Un día completo de ministración, cierre y celebración. El sello de tu primera etapa.", momento:"Al finalizar la Etapa 1"};
+const HITO_CORAM  = {id:"coram",  icon:"🕊", titulo:"Evento Coram Deo", desc:"Un encuentro íntimo a mediados del entrenamiento. Trae a tu discípula y celebren juntas lo que Dios ha hecho.", momento:"A mediados del entrenamiento"};
+const HITO_RETIRO = {id:"retiro", icon:"🌿", titulo:"Retiro Final",      desc:"Un día completo de ministración, cierre y celebración. El sello de tu primera etapa.", momento:"Al finalizar la Etapa 1"};
 
 let estadoUsuario = null;
 
@@ -274,20 +351,15 @@ async function cargarEstado(codigo) {
 }
 
 async function guardarEstado() {
-  try {
-    await window.storage.set(`camino:${estadoUsuario.codigo}`, JSON.stringify(estadoUsuario));
-  } catch(e) {}
+  try { await window.storage.set(`camino:${estadoUsuario.codigo}`, JSON.stringify(estadoUsuario)); } catch(e) {}
 }
 
 async function entrar() {
   const inputCodigo = document.getElementById('input-codigo').value.trim();
   const apodo = document.getElementById('input-apodo').value.trim() || "Linda";
   const codigo = generarCodigo(inputCodigo);
-  if (!codigo) {
-    document.getElementById('login-error').style.display = 'block';
-    return;
-  }
-  document.getElementById('login-error').style.display = 'none';
+  if (!codigo) { document.getElementById('login-error').style.display='block'; return; }
+  document.getElementById('login-error').style.display='none';
   estadoUsuario = await cargarEstado(codigo);
   estadoUsuario.codigo = codigo;
   estadoUsuario.apodo = apodo;
@@ -295,49 +367,118 @@ async function entrar() {
 }
 
 function salir() {
-  document.getElementById('screen-app').style.display = 'none';
-  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('screen-app').style.display='none';
+  document.getElementById('screen-login').style.display='flex';
   estadoUsuario = null;
 }
 
 function mostrarApp() {
-  document.getElementById('screen-login').style.display = 'none';
-  document.getElementById('screen-app').style.display = 'block';
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('screen-app').style.display='block';
   document.getElementById('header-codigo').textContent = estadoUsuario.codigo;
   document.getElementById('bienvenida-nombre').textContent = estadoUsuario.apodo;
+  document.getElementById('header-lider').textContent = `Líder ${obtenerLider(estadoUsuario.codigo)} · Tu acompañante`;
   renderCamino();
   actualizarStats();
 }
 
-async function marcarEstacion(faseId, tipo, btn) {
-  const key = `${faseId}_${tipo}`;
-  if (estadoUsuario.estaciones[key]) return;
-
-  estadoUsuario.estaciones[key] = true;
+async function marcarEstacion(estId, faseId, btn) {
+  if (estadoUsuario.estaciones[estId]) return;
+  estadoUsuario.estaciones[estId] = true;
   await guardarEstado();
 
-  // Actualizar UI
   btn.classList.add('hecho');
   btn.textContent = '✓';
-  btn.closest('.estacion').classList.remove('desbloqueada');
-  btn.closest('.estacion').classList.add('completada');
-
+  const estCard = btn.closest('.estacion');
+  if (estCard) { estCard.classList.remove('activa'); estCard.classList.add('completada'); }
   actualizarStats();
   actualizarProgress();
 
-  // Toast de celebración
-  const fase = FASES_DATA.find(f => f.id === faseId);
-  const tipoLabel = tipo === 'video' ? 'el video' : tipo === 'prof' ? 'la profundización' : 'el regalo';
-  mostrarToast(`¡Completaste ${tipoLabel} de ${fase.nombre}! 🌸`);
+  const frase = FRASES[estId];
+  const fase2 = FASES_DATA.find(f => f.id === faseId);
+  const esFinal = fase2 && fase2.estaciones.every(e => estadoUsuario.estaciones[e.id]);
 
-  setTimeout(() => renderCamino(), 300);
+  if (esFinal) {
+    // Al completar la fase: mostrar celebración con confeti directamente
+    mostrarCelebracion();
+    setTimeout(() => enviarWA(estId, faseId), 500);
+  } else if (frase) {
+    // Estación intermedia con frase: mostrar frase de Elizabeth
+    mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
+      enviarWA(estId, faseId);
+    });
+  } else {
+    // Estación sin frase: solo enviar WA
+    setTimeout(() => enviarWA(estId, faseId), 400);
+  }
+
+  setTimeout(() => renderCamino(), 1500);
 }
 
-function mostrarToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
+function mostrarCelebracion() {
+  const card = document.getElementById('celebracion');
+  // Asegurar que esté cerrada primero
+  card.classList.remove('show');
+  // Esperar que cierre y luego abrir con celebración
+  setTimeout(() => {
+    document.getElementById('celeb-icon').textContent = '🌸';
+    document.getElementById('celeb-titulo').textContent = '';
+    document.getElementById('celeb-frase').textContent = '¡Felicidades Linda! Has completado una fase de tu entrenamiento. ¡Continúa adelante!';
+    card.classList.add('show');
+    lanzarConfeti();
+    setTimeout(() => lanzarConfeti(), 1000); // doble confeti
+    setTimeout(() => card.classList.remove('show'), 5000);
+  }, 400);
+}
+
+function mostrarTarjeta(icon, titulo, mensaje, confeti, duracion, callback) {
+  const card = document.getElementById('celebracion');
+  card.classList.remove('show');
+  setTimeout(() => {
+    document.getElementById('celeb-icon').textContent = icon;
+    document.getElementById('celeb-titulo').textContent = titulo;
+    document.getElementById('celeb-frase').textContent = mensaje;
+    card.classList.add('show');
+    if (confeti) lanzarConfeti();
+    setTimeout(() => {
+      card.classList.remove('show');
+      setTimeout(() => { if (callback) callback(); }, 400);
+    }, duracion);
+  }, 200);
+}
+
+function enviarWA(estId, faseId) {
+  const etiqueta = ETIQUETAS[estId] || estId;
+  const msg = 'Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etiqueta + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38';
+  const wa = obtenerWA(estadoUsuario.codigo);
+  if (wa && !wa.includes('XXXXXXXXXX')) {
+    window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(msg), '_blank');
+  }
+}
+
+function celebrar(faseId) {
+  mostrarCelebracion();
+}
+
+function lanzarConfeti() {
+  const colores = ['#C4738A','#C8956C','#7A8C5A','#7A5C8A','#4A7C7E','#F0D5B0'];
+  const wrap = document.getElementById('confeti-wrap');
+  for (let i=0; i<30; i++) {
+    const p = document.createElement('div');
+    p.className = 'confeti-piece';
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      top:-20px;
+      background:${colores[Math.floor(Math.random()*colores.length)]};
+      animation-delay:${Math.random()*1}s;
+      animation-duration:${2+Math.random()*1.5}s;
+      transform:rotate(${Math.random()*360}deg);
+      width:${6+Math.random()*6}px;
+      height:${6+Math.random()*6}px;
+    `;
+    wrap.appendChild(p);
+    setTimeout(() => p.remove(), 4000);
+  }
 }
 
 function renderCamino() {
@@ -346,23 +487,17 @@ function renderCamino() {
 
   FASES_DATA.forEach((fase, fi) => {
     const desbloqueada = fase.id <= estadoUsuario.faseDesbloqueada;
-    const videoHecho = estadoUsuario.estaciones[`${fase.id}_video`] === true;
-    const profHecho  = estadoUsuario.estaciones[`${fase.id}_prof`]  === true;
-    const todoHecho  = videoHecho && profHecho;
-    const estado = todoHecho ? 'completada' : desbloqueada ? 'activa' : 'bloqueada';
+    const todasCompletas = fase.estaciones.every(e => estadoUsuario.estaciones[e.id]);
+    const algunaHecha = fase.estaciones.some(e => estadoUsuario.estaciones[e.id]);
+    const estado = todasCompletas ? 'completada' : desbloqueada ? 'activa' : 'bloqueada';
 
-    // Insertar hito Coram Deo entre F3 y F4
-    if (fase.id === 4) {
-      wrap.appendChild(crearConector());
-      wrap.appendChild(crearHito(HITO_CORAM, estadoUsuario.coramDesbloqueado, fi));
-      wrap.appendChild(crearConector());
-    } else if (fi > 0) {
+    if (fi > 0) {
       wrap.appendChild(crearConector());
     }
 
     const bloque = document.createElement('div');
     bloque.className = 'fase-bloque';
-    bloque.style.animationDelay = `${fi * 0.06}s`;
+    bloque.style.animationDelay = `${fi * 0.07}s`;
 
     let badgeHTML = estado === 'completada'
       ? '<span class="fase-badge badge-completada">✓ Completada</span>'
@@ -372,35 +507,35 @@ function renderCamino() {
 
     let estacionesHTML = '';
     if (desbloqueada) {
-      fase.estaciones.forEach((est) => {
-        const key = `${fase.id}_${est.tipo}`;
-        const hecho = estadoUsuario.estaciones[key] === true;
-        const claseEst = hecho ? 'completada' : 'desbloqueada';
-        const iconoClass = est.tipo === 'video' ? 'video' : est.tipo === 'prof' ? 'prof' : 'regalo';
-        const iconoChar  = est.tipo === 'video' ? '▶' : est.tipo === 'prof' ? '✦' : '★';
+      fase.estaciones.forEach(est => {
+        const hecho = estadoUsuario.estaciones[est.id] === true;
+        const esEspecial = est.especial || false;
+        const claseEst = (hecho ? 'completada' : 'activa') + (esEspecial ? ' especial' : '');
+        const iconoClass = est.tipo === 'video' ? 'video' : est.tipo === 'prof' ? 'prof' : est.tipo === 'regalo' ? 'regalo' : est.tipo === 'evento' ? 'evento' : est.tipo === 'mentoria' ? 'mentoria' : est.tipo === 'financiero' ? 'financiero' : 'video';
+        const iconoChar = est.tipo === 'video' ? '▶' : est.tipo === 'prof' ? '✦' : est.tipo === 'regalo' ? '★' : est.tipo === 'evento' ? '🙏' : est.tipo === 'mentoria' ? '🌿' : est.tipo === 'financiero' ? '💰' : '▶';
 
         let infoHTML = '';
         if (est.tipo === 'prof') {
           infoHTML = `
             <div class="est-tipo">Profundización</div>
             <div class="est-prof-legend">✦ Es el momento de ahondar en el tema, ¡lo disfrutarás!</div>`;
-        } else {
+        } else if (est.tipo === 'regalo') {
           infoHTML = `
-            <div class="est-tipo">${est.tipo === 'video' ? 'Video base' : 'Descargable'}</div>
+            <div class="est-tipo">Regalo</div>
             <div class="est-nombre">${est.nombre}</div>
-            ${est.desc ? `<div class="est-desc">${est.desc}</div>` : ''}
-            ${est.tipo === 'video' ? '<div class="est-desc">El enlace llega cuando tu equipo lo desbloquee</div>' : ''}`;
+            `;
+        } else {
+          const tipoNombre = est.tipo === 'video' ? 'Video' : est.tipo === 'evento' ? 'Tiempo especial' : est.tipo === 'mentoria' ? 'Mentoría' : est.tipo === 'financiero' ? 'Encuentro' : 'Contenido';
+          infoHTML = `
+            <div class="est-tipo">${tipoNombre}</div>
+            <div class="est-nombre">${est.nombre}</div>
+            ${est.desc ? `<div class="est-tarea">${est.desc}</div>` : ''}
+            ${est.tipo === 'video' ? '<div class="est-tarea">📺 Después de ver el video, deja tu comentario en YouTube. ¡El equipo lo está esperando!</div>' : ''}`;
         }
 
         const checkHTML = hecho
-          ? `<div class="est-check-wrap">
-               <div class="est-check hecho">✓</div>
-               <div class="est-check-label">Listo</div>
-             </div>`
-          : `<div class="est-check-wrap">
-               <div class="est-check pendiente" onclick="marcarEstacion(${fase.id},'${est.tipo}',this)" title="Toca para marcar como completado">○</div>
-               <div class="est-check-label">Marcar</div>
-             </div>`;
+          ? `<div class="est-check-wrap"><div class="est-check hecho">✓</div><div class="est-check-label">Listo</div></div>`
+          : `<div class="est-check-wrap"><div class="est-check" onclick="marcarEstacion('${est.id}',${fase.id},this)">○</div><div class="est-check-label">Marcar</div></div>`;
 
         estacionesHTML += `
           <div class="estacion ${claseEst}">
@@ -409,8 +544,21 @@ function renderCamino() {
             ${checkHTML}
           </div>`;
       });
+
+      // Ayuno en F2
+      if (fase.ayuno) {
+        estacionesHTML += `
+          <div class="estacion activa" style="border-color:rgba(74,124,126,.25);background:rgba(74,124,126,.04);">
+            <div class="est-icono ayuno">🙏</div>
+            <div class="est-info">
+              <div class="est-tipo">Tiempo espiritual</div>
+              <div class="est-nombre">Ayuno de la Fase</div>
+              
+            </div>
+          </div>`;
+      }
     } else {
-      estacionesHTML = `<div class="locked-msg">🔒 Se desbloquea cuando completes la fase anterior</div>`;
+      estacionesHTML = `<div class="locked-msg">🔒 Esta fase se abrirá cuando tu equipo confirme que completaste la anterior. ¡Sigue avanzando!</div>`;
     }
 
     bloque.innerHTML = `
@@ -427,7 +575,8 @@ function renderCamino() {
     wrap.appendChild(bloque);
   });
 
-  // Retiro Final al final
+  wrap.appendChild(crearConector());
+  wrap.appendChild(crearHito(HITO_CORAM, estadoUsuario.coramDesbloqueado, 98));
   wrap.appendChild(crearConector());
   wrap.appendChild(crearHito(HITO_RETIRO, estadoUsuario.retiroDesbloqueado, 99));
 
@@ -437,7 +586,7 @@ function renderCamino() {
 function crearHito(hito, desbloqueado, fi) {
   const div = document.createElement('div');
   div.className = `hito-card${desbloqueado ? '' : ' bloqueado'}`;
-  div.style.animationDelay = `${fi * 0.06}s`;
+  div.style.animationDelay = `${fi * 0.07}s`;
   div.innerHTML = `
     <div class="hito-icon">${desbloqueado ? hito.icon : '🔒'}</div>
     <div class="hito-titulo">${hito.titulo}</div>
@@ -454,28 +603,28 @@ function crearConector() {
 }
 
 function actualizarProgress() {
-  const total = 7;
-  const completadas = FASES_DATA.filter(f => estadoUsuario.estaciones[`${f.id}_video`] === true).length;
-  const pct = Math.round((completadas / total) * 100);
+  const totalVideos = 8; // 7 fases + F4 tiene 2 videos
+  const videosIds = ['f1_video','f2_video','f3_video','f4_vid1','f4_vid2','f5_video','f6_video','f7_video'];
+  const completados = videosIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const pct = Math.round((completados / totalVideos) * 100);
   document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = `${completadas} de ${total} fases`;
+  document.getElementById('progress-label').textContent = `${completados} de ${totalVideos} videos`;
 }
 
 function actualizarStats() {
-  let videos=0, profs=0;
-  FASES_DATA.forEach(f => {
-    if (estadoUsuario.estaciones[`${f.id}_video`]) videos++;
-    if (estadoUsuario.estaciones[`${f.id}_prof`])  profs++;
-  });
+  const videosIds = ['f1_video','f2_video','f3_video','f4_vid1','f4_vid2','f5_video','f6_video','f7_video'];
+  const profsIds  = ['f1_prof','f2_prof','f3_prof','f4_prof','f5_prof','f6_prof','f7_prof'];
+  const videos = videosIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const profs  = profsIds.filter(id => estadoUsuario.estaciones[id]).length;
+  const fases  = FASES_DATA.filter(f => f.estaciones.every(e => estadoUsuario.estaciones[e.id])).length;
   document.getElementById('stat-videos').textContent = videos;
   document.getElementById('stat-profs').textContent  = profs;
-  document.getElementById('stat-fases').textContent  = videos;
+  document.getElementById('stat-fases').textContent  = fases;
 }
 
 document.getElementById('input-apodo').addEventListener('keydown', e => { if(e.key==='Enter') entrar(); });
 document.getElementById('input-codigo').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('input-apodo').focus(); });
 document.getElementById('input-codigo').addEventListener('input', function() { this.value = this.value.toUpperCase(); });
 </script>
-
-
-</body></html>
+</body>
+</html>
