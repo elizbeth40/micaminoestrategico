@@ -398,18 +398,22 @@ async function marcarEstacion(estId, faseId, btn) {
   const fase2 = FASES_DATA.find(f => f.id === faseId);
   const esFinal = fase2 && fase2.estaciones.every(e => estadoUsuario.estaciones[e.id]);
 
-  if (esFinal) {
-    // Al completar la fase: mostrar celebración con confeti directamente
-    mostrarCelebracion();
-    setTimeout(() => enviarWA(estId, faseId), 500);
-  } else if (frase) {
-    // Estación intermedia con frase: mostrar frase de Elizabeth
+  // Construir URL de WhatsApp
+  const etiqueta = ETIQUETAS[estId] || estId;
+  const msg = 'Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etiqueta + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38';
+  const wa = obtenerWA(estadoUsuario.codigo);
+  const waUrl = (wa && !wa.includes('XXXXXXXXXX')) ? 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg) : null;
+
+  if (frase) {
+    // Mostrar frase 7 segundos, luego abrir WA y celebrar si es final
     mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, () => {
-      enviarWA(estId, faseId);
+      if (waUrl) window.open(waUrl, '_blank');
+      if (esFinal) setTimeout(() => mostrarCelebracion(), 500);
     });
   } else {
-    // Estación sin frase: solo enviar WA
-    setTimeout(() => enviarWA(estId, faseId), 400);
+    // Sin frase: abrir WA directo
+    if (waUrl) window.open(waUrl, '_blank');
+    if (esFinal) setTimeout(() => mostrarCelebracion(), 400);
   }
 
   setTimeout(() => renderCamino(), 1500);
@@ -447,14 +451,7 @@ function mostrarTarjeta(icon, titulo, mensaje, confeti, duracion, callback) {
   }, 200);
 }
 
-function enviarWA(estId, faseId) {
-  const etiqueta = ETIQUETAS[estId] || estId;
-  const msg = 'Hola! Soy ' + estadoUsuario.apodo + ' (' + estadoUsuario.codigo + ') de la Agenda Estratégica.\n\nAcabo de completar ' + etiqueta + '. Por favor actualiza mi progreso. \u00a1Gracias! \uD83C\uDF38';
-  const wa = obtenerWA(estadoUsuario.codigo);
-  if (wa && !wa.includes('XXXXXXXXXX')) {
-    window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(msg), '_blank');
-  }
-}
+
 
 function celebrar(faseId) {
   mostrarCelebracion();
@@ -535,7 +532,7 @@ function renderCamino() {
 
         const checkHTML = hecho
           ? `<div class="est-check-wrap"><div class="est-check hecho">✓</div><div class="est-check-label">Listo</div></div>`
-          : `<div class="est-check-wrap"><div class="est-check" onclick="marcarEstacion('${est.id}',${fase.id},this)">○</div><div class="est-check-label">Marcar</div></div>`;
+          : `<div class="est-check-wrap"><div class="est-check" onclick="marcarEstacion('${est.id}',${fase.id},this)">○</div><div class="est-check-label" style="font-size:.5rem;color:var(--teal);line-height:1.2;max-width:36px;text-align:center;">Al marcar avisas a tu líder</div></div>`;
 
         estacionesHTML += `
           <div class="estacion ${claseEst}">
