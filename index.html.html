@@ -132,6 +132,12 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 @keyframes caer{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
 .locked-msg{text-align:center;padding:.75rem;font-size:.73rem;color:#B0A0A8;font-style:italic;line-height:1.5}
+.unlock-wrap{padding:.75rem;text-align:center}
+.unlock-input{width:100%;padding:.6rem .8rem;background:var(--white);border:1px solid var(--border);border-radius:8px;font-family:'Jost',sans-serif;font-size:.85rem;text-align:center;color:var(--text);margin-bottom:.5rem;letter-spacing:.05em}
+.unlock-input:focus{outline:none;border-color:var(--rose)}
+.unlock-btn{padding:.5rem 1.25rem;background:var(--rose);color:white;font-family:'Jost',sans-serif;font-size:.78rem;font-weight:500;border:none;border-radius:20px;cursor:pointer;transition:opacity .2s}
+.unlock-btn:hover{opacity:.88}
+.unlock-error{font-size:.72rem;color:#E8A0A0;margin-top:.35rem;display:none}
 .estacion.especial{background:rgba(74,124,126,.04);border:1px solid rgba(74,124,126,.2)}
 .estacion.especial.completada{background:rgba(74,124,126,.1);border-color:rgba(74,124,126,.35)}
 .est-icono.evento{background:rgba(74,124,126,.12)}
@@ -205,6 +211,17 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min
 
 <script>
 // ══════════════════════════════════════════════════════════════
+
+// PALABRAS DE DESBLOQUEO — una por fase
+const PALABRAS_DESBLOQUEO = {
+  2: "PROPÓSITO",          // desbloquea F2
+  3: "PRIORIDADES",        // desbloquea F3
+  4: "OBJETIVOS",          // desbloquea F4
+  5: "DIARIO DE CRECIMIENTO", // desbloquea F5
+  6: "CORAM DEO",          // desbloquea F6
+  7: "COMPARTIR MI FE",    // desbloquea F7
+};
+// ══════════════════════════════════════════════════════════════
 // CONFIGURACIÓN DE LÍDERES — EDITA SOLO AQUÍ cuando cambien
 // Formato Colombia: 57 + número sin espacios. Ej: 573001234567
 const LIDERES = {
@@ -219,6 +236,17 @@ const RANGO_LIDERES = [
   // Para agregar Líder 4: { lider:4, desde:61, hasta:80 }
   // Avisa a tu equipo de tecnología y se añade en 2 minutos
 ];
+// ══════════════════════════════════════════════════════════════
+
+// PALABRAS DE DESBLOQUEO — una por fase
+const PALABRAS_DESBLOQUEO = {
+  2: "PROPÓSITO",          // desbloquea F2
+  3: "PRIORIDADES",        // desbloquea F3
+  4: "OBJETIVOS",          // desbloquea F4
+  5: "DIARIO DE CRECIMIENTO", // desbloquea F5
+  6: "CORAM DEO",          // desbloquea F6
+  7: "COMPARTIR MI FE",    // desbloquea F7
+};
 // ══════════════════════════════════════════════════════════════
 
 function obtenerLider(codigo) {
@@ -414,6 +442,29 @@ function marcarEstacion(estId, faseId, btn) {
     setTimeout(() => mostrarTarjeta('🌸', 'Elizabeth Loaiza', '"' + frase + '"', false, 7000, null), 300);
   }
   setTimeout(() => renderCamino(), 1500);
+}
+
+function intentarDesbloqueo(faseId) {
+  const input = document.getElementById('unlock-' + faseId);
+  const errorEl = document.getElementById('unlock-error-' + faseId);
+  if (!input) return;
+  const palabra = input.value.trim().toUpperCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, ""); // quitar tildes
+  const esperada = (PALABRAS_DESBLOQUEO[faseId] || "")
+    .toUpperCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "");
+  if (palabra === esperada) {
+    estadoUsuario.faseDesbloqueada = Math.max(estadoUsuario.faseDesbloqueada, faseId);
+    guardarEstado();
+    errorEl.style.display = 'none';
+    // Celebración de desbloqueo
+    mostrarTarjeta('🔓', '¡Fase desbloqueada!', '¡Bien hecho! La siguiente fase está lista para ti. ¡Sigue adelante!', false, 4000, null);
+    setTimeout(() => renderCamino(), 500);
+  } else {
+    errorEl.style.display = 'block';
+    input.value = '';
+    input.focus();
+  }
 }
 
 function mostrarCelebracion() {
@@ -619,6 +670,14 @@ function actualizarStats() {
 document.getElementById('input-apodo').addEventListener('keydown', e => { if(e.key==='Enter') entrar(); });
 document.getElementById('input-codigo').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('input-apodo').focus(); });
 document.getElementById('input-codigo').addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+
+// Allow Enter on unlock inputs
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && e.target.classList.contains('unlock-input')) {
+    const faseId = parseInt(e.target.id.replace('unlock-',''));
+    if (faseId) intentarDesbloqueo(faseId);
+  }
+});
 </script>
 </body>
 </html>
