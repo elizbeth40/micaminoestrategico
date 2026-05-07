@@ -242,12 +242,8 @@ const RANGO_LIDERES = [
 
 // ══════════════════════════════════════════════════════════════
 
-function obtenerLider(codigo) {
-  const n = parseInt(codigo.replace('LINDA-',''));
-  const r = RANGO_LIDERES.find(r => n >= r.desde && n <= r.hasta);
-  return r ? r.lider : 1;
-}
-function obtenerWA(codigo) { return LIDERES[obtenerLider(codigo)]; }
+function obtenerLider(codigo) { return 1; }
+function obtenerWA(codigo) { return null; }
 // ─── FRASES REALES DE ELIZABETH POR ESTACIÓN ──────────────────
 const FRASES = {
   // F1
@@ -596,7 +592,14 @@ function renderCamino() {
           </div>`;
       }
     } else {
-      estacionesHTML = `<div class="locked-msg">🔒 Esta fase se abrirá cuando tu equipo confirme que completaste la anterior. ¡Sigue avanzando!</div>`;
+      const palabraReq = PALABRAS_DESBLOQUEO[fase.id] || '';
+      estacionesHTML = `
+        <div class="unlock-wrap">
+          <div class="locked-msg" style="margin-bottom:.6rem;">🔒 Tu líder te enviará una palabra clave para desbloquear esta fase.</div>
+          <input type="text" class="unlock-input" id="unlock-${fase.id}" placeholder="Escribe la palabra clave aquí..." autocomplete="off" autocapitalize="characters">
+          <button class="unlock-btn" onclick="intentarDesbloqueo(${fase.id})">Desbloquear →</button>
+          <div class="unlock-error" id="unlock-error-${fase.id}">Palabra incorrecta. Verifica con tu líder. 🙏</div>
+        </div>`;
     }
 
     bloque.innerHTML = `
